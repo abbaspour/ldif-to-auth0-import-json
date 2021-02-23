@@ -2,7 +2,7 @@
 // https://auth0.com/docs/users/bulk-user-import-database-schema-and-examples
 
 exports.map = {
-    "apcustomerid": "user_id.field",
+    "apcustomerid": "user_id",
     "sn": "family_name",
     "mail": "email",
     "userpassword": [
@@ -13,7 +13,7 @@ exports.map = {
         ,
         {
             key: "custom_password_hash.algorithm",
-            transform : () => "sha512"
+            transform: () => "sha512"
         }
     ]
 };

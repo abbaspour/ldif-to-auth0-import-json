@@ -1,14 +1,17 @@
 {
   "name": "ldif-to-auth0-import-json",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Convert LDIF export from various LDAP servers to Auth0 compatible bulk user import JSON file",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "LDIF",
+    "Auth0",
+    "JSON",
+    "bulk",
+    "import"
+  ],
+  "author": "Amin Abbaspour",
+  "license": "LGPL",
   "dependencies": {
     "json-stable-stringify": "^1.0.1",
     "ldif": "^0.5.1",
