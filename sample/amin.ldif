@@ -1,0 +1,19 @@
+version: 1
+
+dn: cn=amin@example.com,cn=users,dc=example,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: amin@example.com
+sn: Abbaspour
+accounttype: user
+customerid: 1012106739
+useraccountid: C00010069107
+description: SampleDataOnly
+givenname: Amin
+mail: amin@example.com
+uid: amin@example.com
+userpassword: {SHA512}:B67A688B-EA26-40A0-9857-4DB9342D0736:v2rmRxva90qNJZlb3dHikduSoDb5Slk1/0/4jHY3gRWAlTd/sl6vJ2DUBnxeWbJY6Q7fACw1yx7Y4E4auffEVA==
+
+

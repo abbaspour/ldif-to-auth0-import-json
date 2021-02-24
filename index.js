@@ -14,14 +14,10 @@ console.log('[');
 
 let record = file.shift();
 do {
-    //console.log(JSON.stringify(record.toObject().attributes, null, '  '));
     let dest = objectMapper(record.toObject().attributes, map.map);
-    //console.log(JSON.stringify(dest));
-    //process.stdout.write(JSON.stringify(dest, Object.keys(dest).sort(), argv.space));
     process.stdout.write(stringify(dest, {space: argv.space}));
     record = file.shift();
-    if(record != null)
-        console.log(',')
+    if(record != null) console.log(',')
 } while (record != null)
 
 console.log("\n]");
