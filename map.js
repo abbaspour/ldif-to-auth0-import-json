@@ -27,7 +27,7 @@ exports.map = {
         {
             key: "custom_password_hash.salt.encoding",
             transform: () => 'utf8'
-        } ,
+        },
         {
             key: "custom_password_hash.algorithm",
             transform: () => "sha512"

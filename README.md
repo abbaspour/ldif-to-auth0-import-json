@@ -13,7 +13,7 @@ vim map.js
 
 3. Run Convert 
 ```bash
-./convert.sh -i myexport.ldif -m my-map.js -o users.json
+./convert.sh -i myexport.ldif -m my-map.js -o users -s 2048
 ```
 
 4. Import 
@@ -25,3 +25,15 @@ vim map.js
 ```bash
 ./job-status.sh -i job_id
 ```
+
+## Benchmark
+
+Benchmarks are with Node.js v14.16.0 on 2.6Ghz 6-core i7 SSD  
+
+> Note: Current version only supports LDIF files up to 1.7G
+
+
+| LDIF size (MB) | Output chunk size (MB) | Number of files | Time |
+|------ | --- | --- | --- |
+| 29m | ~1M | 20 | 6.537s |
+| 281m | ~1M | 193 | 4m38.000s |

@@ -9,13 +9,14 @@ USAGE: $0 [-i input.ldif] [-m map.file] [-o output.json] [-v|-h]
         -d domain      # Auth0 domain
         -m map         # map file (default is map.json)
         -i file        # input file (LDIF)
-        -o output      # optional output file. defaults to stdout
+        -o output      # output file prefix
+        -s size        # approximate output file size in kb. default is 1000
         -p             # pretty print
         -h|?           # usage
         -v             # verbose
 
 eg,
-     $0 -i sample.ldif -o sample.json
+     $0 -i sample.ldif -m redhat-ds.js -o output -s 2048
 END
     exit ${1}
 }
@@ -23,14 +24,15 @@ END
 declare input=''
 declare output=''
 declare space=''
+declare -i size=1000
 declare map="${DIR}/map.json"
 
-
-while getopts "i:o:phv?" opt
+while getopts "i:s:o:phv?" opt
 do
     case ${opt} in
         i) input="${OPTARG}";;
         o) output=${OPTARG};;
+        s) size=${OPTARG};;
         p) space='  ';;
         v) set -x;;
         h|?) usage 0;;
@@ -39,7 +41,7 @@ do
 done
 
 [[ -z "${input}" ]] && { echo >&2 "ERROR: input undefined"; usage 1; }
-readonly out=${output:-/dev/stdout}
+[[ -z "${output}" ]] && { echo >&2 "ERROR: output undefined"; usage 1; }
 
 [[ ! -d "${DIR}/node_modules" ]] && npm i
-node "${DIR}/index.js" --input "${input}" --map "${map}" --space "${space}" > "${out}"
+node "${DIR}/index.js" --input "${input}" --map "${map}" --space "${space}" --size "${size}" --output "${output}"
