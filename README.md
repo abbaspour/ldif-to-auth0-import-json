@@ -18,7 +18,7 @@ Mapping in `map.js` file is from `ldap field` -> `json field`. Here is an exampl
 ### Example
 How to map OpenLDAP SSHA password to Auth0? Here is the map config:
 
-```json
+```javascript
 {   
     "userpassword": [
         {
