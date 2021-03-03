@@ -1,6 +1,55 @@
 # ldif-to-auth0-import-json
 Convert LDIF export from various LDAP servers to [Auth0 compatible bulk user import JSON file](https://auth0.com/docs/users/bulk-user-import-database-schema-and-examples#user-json-schema).
 
+## Mapping
+
+Mapping in `map.js` file is from `ldap field` -> `json field`. Here is an example:
+
+```json
+{
+    "useraccountid": "user_id",
+    "sn": "family_name",
+    "givenname": "given_name",
+    "mail": "email",
+    "customerid": "app_metadata.customerid"
+}
+```
+
+### Example
+How to map OpenLDAP SSHA password to Auth0? Here is the map config:
+
+```json
+{   
+    "userpassword": [
+        {
+            key: "custom_password_hash.algorithm",
+            transform: () => "sha1"
+        },
+        // hash
+        {
+            key: "custom_password_hash.hash.value",
+            transform: (value) => Buffer.from(value.substr(6), 'base64').toString('hex', 0, 20)
+        },
+        {
+            key: "custom_password_hash.hash.encoding",
+            transform: (value) => 'hex'
+        },
+        // salt
+        {
+            key: "custom_password_hash.salt.value",
+            transform: (value) => Buffer.from(value.substr(6), 'base64').toString('hex', 20)
+        },
+        {
+            key: "custom_password_hash.salt.encoding",
+            transform: () => 'hex'
+        },
+        {
+            key: "custom_password_hash.salt.position",
+            transform: () => 'suffix'
+        }
+    ]
+}
+```
 
 ## Steps
 1. Export users from LDAP server to `myexport.ldif`

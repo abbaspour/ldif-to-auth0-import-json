@@ -6,7 +6,6 @@ readonly DIR=$(dirname "${BASH_SOURCE[0]}")
 function usage() {
     cat <<END >&2
 USAGE: $0 [-i input.ldif] [-m map.file] [-o output.json] [-v|-h]
-        -d domain      # Auth0 domain
         -m map         # map file (default is map.json)
         -i file        # input file (LDIF)
         -o output      # output file prefix
@@ -16,7 +15,7 @@ USAGE: $0 [-i input.ldif] [-m map.file] [-o output.json] [-v|-h]
         -v             # verbose
 
 eg,
-     $0 -i sample.ldif -m redhat-ds.js -o output -s 2048
+     $0 -i sample.ldif -m redhat-ds -o output -s 2048
 END
     exit ${1}
 }
@@ -25,14 +24,15 @@ declare input=''
 declare output=''
 declare space=''
 declare -i size=1000
-declare map="${DIR}/map.json"
+declare map="${DIR}/map"
 
-while getopts "i:s:o:phv?" opt
+while getopts "i:m:s:o:phv?" opt
 do
     case ${opt} in
         i) input="${OPTARG}";;
         o) output=${OPTARG};;
         s) size=${OPTARG};;
+        m) map=$(echo "${OPTARG}" | awk -F'.' '{print $1}');;
         p) space='  ';;
         v) set -x;;
         h|?) usage 0;;

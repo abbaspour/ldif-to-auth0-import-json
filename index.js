@@ -2,11 +2,11 @@ const ldif = require("ldif");
 const fs = require("fs");
 const objectMapper = require("object-mapper");
 const stringify = require('json-stable-stringify');
-const map = require("./map").map;
 
 const yargs = require("yargs/yargs");
 const {hideBin} = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv)).argv;
+const map = require("./" + argv.map).map;
 
 const file = ldif.parse(fs.readFileSync(argv.input, 'utf8'));
 
@@ -36,7 +36,7 @@ function writeNextBatch(generator, filename, max_size) {
             stream.write(",\n");
         }
     }
-    console.error(fileSize);
+    //console.error(fileSize);
 
     stream.write("\n]\n");
     stream.end();
