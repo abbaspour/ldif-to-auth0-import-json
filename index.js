@@ -20,25 +20,22 @@ const generator = function* () {
 
 function writeNextBatch(generator, filename, max_size) {
     const stream = fs.createWriteStream(filename);
-
-    stream.write("[\n");
-    let fileSize = 4;
+    let first = true;
+    let fileSize = 3;
 
     let record = generator.next();
     while (!record.done && fileSize < max_size) {
         const dest = objectMapper(record.value, map);
         const entry = stringify(dest, {space: argv.space});
-        fileSize += (entry.length + 1);
+        fileSize += (entry.length + 2);
+        stream.write(first ? "[\n" : ",\n");
         stream.write(entry);
+        first = false;
         record = generator.next();
-        if (!record.done && fileSize < max_size) {
-            fileSize++;
-            stream.write(",\n");
-        }
     }
     //console.error(fileSize);
 
-    stream.write("\n]\n");
+    stream.write(first ? '' : "\n]\n");
     stream.end();
 
     return record.done;
@@ -51,5 +48,8 @@ let fileIndex = 1;
 let done = true;
 
 do {
-    done = writeNextBatch(generator, outputFileName(argv.output, fileIndex++), parseInt(argv.size, 10) * 1024);
+    done = writeNextBatch(generator, outputFileName(argv.output, fileIndex++), parseInt(argv.size, 10) * 1000);
+    if (argv.progress) process.stdout.write('.');
 } while (!done)
+
+if (argv.progress) process.stdout.write('\n');
