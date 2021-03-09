@@ -11,7 +11,7 @@ function usage() {
 USAGE: $0 [-p password] [-s salt] [-a algorithm] [-f users.file] [-v|-h]
         -p password  # password
         -s salt      # salt
-        -a algorithm # sha1, sha256, sha512, md5, etc
+        -a algorithm # sha1, sha256, ssha512
         -d delimiter # delimiter (defaults empty)
         -S           # random salt
         -h|?         # usage
@@ -38,7 +38,23 @@ done
 
 [[ -z "${password}" ]] && { echo >&2 "ERROR: password undefined."; usage 1; }
 
-# readonly digest=$(/bin/echo -n "${salt}${password}" | openssl ${algorithm})
-readonly digest=$(/bin/echo -n "${salt}${password}" | openssl dgst -${algorithm} -binary | openssl enc -A -base64)
+readonly tmp=$(mktemp)
+/bin/echo -n "${password}${salt}" | openssl dgst -"${algorithm}" -binary > "${tmp}"
 
-echo "${salt}${delimiter}${digest}"
+[[ -n "${salt}" ]] && /bin/echo -n "${salt}" >> "${tmp}"
+
+readonly digest=$(openssl enc -in "${tmp}" -A -base64)
+
+declare prefix=''
+
+if [[ -n "${salt}" ]]; then
+  if [[ "${algorithm}" == 'sha1' ]]; then prefix='{SSHA}'; fi
+  if [[ "${algorithm}" == 'sha256' ]]; then prefix='{SSHA256}'; fi
+  if [[ "${algorithm}" == 'sha512' ]]; then prefix='{SSHA512}'; fi
+else
+  if [[ "${algorithm}" == 'sha1' ]]; then prefix='{SHA}'; fi
+  if [[ "${algorithm}" == 'sha256' ]]; then prefix='{SHA256}'; fi
+  if [[ "${algorithm}" == 'sha512' ]]; then prefix='{SHA512}'; fi
+fi
+
+echo "${prefix}${digest}"
