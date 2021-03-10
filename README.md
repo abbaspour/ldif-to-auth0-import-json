@@ -15,6 +15,15 @@ Mapping in `map.js` file is from `ldap field` -> `json field`. Here is an exampl
 }
 ```
 
+### Sample Mapper for Popular LDAP Hashing Algorithms
+
+| Algorithm | Description | Sample Input | Hash Value | Salt Value |  Salt Position | Encoding |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| SHA | `base64(sha1(pass))` | {SHA}xxxx | `Buffer.from(password.substr(5), 'base64').toString('hex', 0, 20)` | NA | - | hex |
+| SSHA | `base64(sha1(pass + salt))` | {SSHA}xxxx== | `Buffer.from(userpassword.substr(6), 'base64').toString('hex', 0, 20)` | `Buffer.from(userpassword.substr(6), 'base64').toString('hex', 20)` | suffix | hex |
+| SHA512 | `base64(sha512(pass))` | {SHA512}xxxx | `Buffer.from(userpassword.substr(8), 'base64').toString('hex', 0, 64)` | NA | - | hex |
+| SSHA512 | `base64(sha512(pass + salt))` | {SSHA512}xxxx== | `Buffer.from(userpassword.substr(9), 'base64').toString('hex', 0, 64)` | `Buffer.from(userpassword.substr(9), 'base64').toString('hex', 64)` | suffix | hex |
+
 ### Example
 How to map OpenLDAP SSHA password to Auth0? Here is the map config:
 
@@ -79,7 +88,7 @@ vim map.js
 
 Benchmarks are with Node.js v14.16.0 on 2.6Ghz 6-core i7 SSD  
 
-> Note: Current version only supports LDIF files up to 1.7G
+> Note: Current version only supports LDIF files up to 2G
 
 
 | LDIF size (MB) | Output chunk size (MB) | Number of files | Time |
