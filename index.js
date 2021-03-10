@@ -18,6 +18,8 @@ const generator = function* () {
     }
 }();
 
+const is_empty_salt = (o) => Object.keys(o.custom_password_hash.salt).length === 0;
+
 function writeNextBatch(generator, filename, max_size) {
     const stream = fs.createWriteStream(filename);
     let first = true;
@@ -26,6 +28,7 @@ function writeNextBatch(generator, filename, max_size) {
     let record = generator.next();
     while (!record.done && fileSize < max_size) {
         const dest = objectMapper(record.value, map);
+        if(is_empty_salt(dest)) delete dest.custom_password_hash.salt;
         const entry = stringify(dest, {space: argv.space});
         fileSize += (entry.length + 2);
         stream.write(first ? "[\n" : ",\n");
