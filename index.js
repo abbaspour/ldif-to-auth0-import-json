@@ -19,9 +19,9 @@ const generator = function* () {
 }();
 
 const clean_empty_fields = (dest) => {
-    if(Object.keys(dest.custom_password_hash.salt).length === 0) delete dest.custom_password_hash.salt;
-    if(Object.keys(dest.custom_password_hash.hash).length === 0) delete dest.custom_password_hash.hash;
-    if(Object.keys(dest.custom_password_hash).length === 0) delete dest.custom_password_hash;
+    if(Object.keys(dest.custom_password_hash.salt ?? {}).length === 0) delete dest.custom_password_hash.salt;
+    if(Object.keys(dest.custom_password_hash.hash ?? {}).length === 0) delete dest.custom_password_hash.hash;
+    if(Object.keys(dest.custom_password_hash ?? {}).length === 0) delete dest.custom_password_hash;
 }
 
 function writeNextBatch(generator, filename, max_size) {
