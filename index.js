@@ -54,13 +54,13 @@ function writeNextBatch(generator, filename, max_size) {
 }
 
 const zeroPad = (num, places) => String(num).padStart(places, '0')
-const outputFileName = (prefix, index) => prefix + '_' + zeroPad(index, 5) + ".json"
+const outputFileName = (folder, prefix, index) => folder + '/' + prefix + '_' + zeroPad(index, 5) + ".json"
 
 let fileIndex = 1;
 let done = true;
 
 do {
-    done = writeNextBatch(generator, outputFileName(argv.output, fileIndex++), parseInt(argv.size, 10) * 1000);
+    done = writeNextBatch(generator, outputFileName(argv.output, argv.prefix, fileIndex++), parseInt(argv.size, 10) * 1000);
     if (argv.progress) process.stdout.write('.');
 } while (!done)
 
