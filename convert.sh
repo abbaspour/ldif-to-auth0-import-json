@@ -32,9 +32,9 @@ while getopts "i:m:s:o:pPhv?" opt
 do
     case ${opt} in
         i) input="${OPTARG}";;
-        o) output=${OPTARG};;
+        o) output="${OPTARG}";;
         s) size=${OPTARG};;
-        m) map=$(echo "${OPTARG}" | awk -F'.' '{print $1}');;
+        m) map="${OPTARG}";;
         p) space='  ';;
         P) ext_args='--progress .';;
         v) set -x;;
@@ -45,6 +45,10 @@ done
 
 [[ -z "${input}" ]] && { echo >&2 "ERROR: input undefined"; usage 1; }
 [[ -z "${output}" ]] && { echo >&2 "ERROR: output undefined"; usage 1; }
+[[ -z "${map}" ]] && { echo >&2 "ERROR: map undefined"; usage 1; }
+
+[[ ! -f "${map}" ]] && { echo >&2 "ERROR: map is not a file: ${map}"; usage 1; }
+[[ ! -f "${input}" ]] && { echo >&2 "ERROR: input is not a file: ${input}"; usage 1; }
 
 [[ ! -d "${DIR}/node_modules" ]] && npm i
 node "${DIR}/index.js" --input "${input}" --map "${map}" --space "${space}" --size "${size}" --output "${output}" ${ext_args}

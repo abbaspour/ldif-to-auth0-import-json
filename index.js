@@ -8,6 +8,11 @@ const {hideBin} = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv)).argv;
 const map = require("./" + argv.map).map;
 
+if(! map) {
+    console.error("ERROR: mapper not loaded correctly: " + argv.map);
+    process.exit(1);
+}
+
 const file = ldif.parse(fs.readFileSync(argv.input, 'utf8'));
 
 const generator = function* () {
