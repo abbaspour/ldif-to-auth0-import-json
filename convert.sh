@@ -13,6 +13,7 @@ USAGE: $0 [-i input.ldif] [-m map.file] [-o folder] [-p users] [-v|-h]
         -o output      # output folder (default is cwd)
         -s size        # approximate output file size in kb. default is 500
         -n prefix      # output files name. default ${prefix}
+        -S index       # start index. default is 0
         -p             # pretty print
         -P             # show progress
         -h|?           # usage
@@ -29,9 +30,10 @@ declare output="${DIR}"
 declare space=''
 declare ext_args=''
 declare -i size=500
+declare -i index=0
 declare map="${DIR}/map"
 
-while getopts "i:m:s:o:n:pPhv?" opt
+while getopts "i:m:s:o:n:S:pPhv?" opt
 do
     case ${opt} in
         i) input="${OPTARG}";;
@@ -39,6 +41,7 @@ do
         s) size=${OPTARG};;
         m) map="${OPTARG}";;
         n) prefix="${OPTARG}";;
+        S) index="${OPTARG}";;
         p) space='  ';;
         P) ext_args='--progress .';;
         v) set -x;;
@@ -56,4 +59,4 @@ done
 [[ ! -d "${output}" ]] && { echo >&2 "ERROR: output is not a folder: ${output}"; usage 1; }
 
 [[ ! -d "${DIR}/node_modules" ]] && npm i
-node "${DIR}/index.js" --input "${input}" --map "${map}" --space "${space}" --size "${size}" --output "${output}" --prefix "${prefix}" ${ext_args}
+node "${DIR}/index.js" --input "${input}" --map "${map}" --space "${space}" --size "${size}" --output "${output}" --prefix "${prefix}" --index "${index}" ${ext_args}
